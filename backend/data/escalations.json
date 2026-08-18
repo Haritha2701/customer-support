@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "time": "2026-08-17T22:21:34.745320",
+        "customer_message": "I am furious! This is unacceptable! Nobody is helping me!",
+        "frustration_score": 75,
+        "frustration_level": "HIGH",
+        "category": "delivery",
+        "knowledge_confidence": 20,
+        "trust_score": 0,
+        "trust_level": "LOW",
+        "escalation_reason": "Customer frustration is high and AI confidence is low.",
+        "status": "RESOLVED",
+        "resolved_time": "2026-08-17T22:22:15.755158"
+    }
+]

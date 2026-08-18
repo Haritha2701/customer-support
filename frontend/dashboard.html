@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TrustCare AI - Human Support Dashboard</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 20px 30px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            margin: 6px 0 0;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .card p {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .escalation {
+            background: white;
+            border-left: 5px solid #dc2626;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .escalation.resolved {
+            border-left-color: #16a34a;
+        }
+
+        .message {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .detail {
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+
+        .high {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .medium {
+            color: #d97706;
+            font-weight: bold;
+        }
+
+        .low {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .open {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .resolved-status {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .reason {
+            background: #fff7ed;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #2563eb;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button.resolve-button {
+            background: #16a34a;
+        }
+
+        button.resolve-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 30px;
+        }
+
+        #error {
+            color: #dc2626;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 900px) {
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>TrustCare AI</h1>
+
+    <p>Human Support Dashboard</p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- DASHBOARD STATISTICS -->
+
+    <div class="summary">
+
+
+        <div class="card">
+
+            <h2>Total Escalations</h2>
+
+            <p id="totalEscalations">0</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>High Frustration</h2>
+
+            <p id="highFrustration">0</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Medium Frustration</h2>
+
+            <p id="mediumFrustration">0</p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Low Frustration</h2>
+
+            <p id="lowFrustration">0</p>
+
+        </div>
+
+
+    </div>
+
+
+    <h2>Escalated Conversations</h2>
+
+
+    <div id="loading">
+
+        Loading escalations...
+
+    </div>
+
+
+    <div id="error"></div>
+
+
+    <div id="escalations"></div>
+
+
+</div>
+
+
+<script>
+
+
+// ==========================================
+// LOAD ESCALATIONS
+// ==========================================
+
+async function loadEscalations() {
+
+    try {
+
+
+        const response = await fetch(
+            "http://127.0.0.1:5000/escalations"
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load escalations"
+            );
+
+        }
+
+
+        const data = await response.json();
+
+
+        document.getElementById(
+            "loading"
+        ).style.display = "none";
+
+
+        const escalations =
+            data.escalations || [];
+
+
+        // ======================================
+        // STATISTICS
+        // ======================================
+
+        document.getElementById(
+            "totalEscalations"
+        ).textContent =
+            escalations.length;
+
+
+        const highCount =
+            escalations.filter(
+                item =>
+                    item.frustration_level === "HIGH"
+            ).length;
+
+
+        const mediumCount =
+            escalations.filter(
+                item =>
+                    item.frustration_level === "MEDIUM"
+            ).length;
+
+
+        const lowCount =
+            escalations.filter(
+                item =>
+                    item.frustration_level === "LOW"
+            ).length;
+
+
+        document.getElementById(
+            "highFrustration"
+        ).textContent =
+            highCount;
+
+
+        document.getElementById(
+            "mediumFrustration"
+        ).textContent =
+            mediumCount;
+
+
+        document.getElementById(
+            "lowFrustration"
+        ).textContent =
+            lowCount;
+
+
+        // ======================================
+        // ESCALATIONS
+        // ======================================
+
+        const container =
+            document.getElementById(
+                "escalations"
+            );
+
+
+        if (escalations.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="card">
+
+                    No escalated conversations.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML =
+            escalations.map(
+                item => {
+
+
+                    let frustrationClass =
+                        "low";
+
+
+                    if (
+                        item.frustration_level === "HIGH"
+                    ) {
+
+                        frustrationClass = "high";
+
+                    }
+                    else if (
+                        item.frustration_level === "MEDIUM"
+                    ) {
+
+                        frustrationClass = "medium";
+
+                    }
+
+
+                    const isResolved =
+                        item.status === "RESOLVED";
+
+
+                    return `
+
+                        <div class="escalation ${isResolved ? "resolved" : ""}">
+
+
+                            <h3>
+
+                                🚨 Escalation #${item.id}
+
+                            </h3>
+
+
+                            <small>
+
+                                ${item.time}
+
+                            </small>
+
+
+                            <div class="message">
+
+                                <strong>
+                                    Customer Message
+                                </strong>
+
+                                <p>
+                                    ${item.customer_message}
+                                </p>
+
+                            </div>
+
+
+                            <div class="details">
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Frustration Score
+                                    </strong>
+
+                                    <br>
+
+                                    ${item.frustration_score}
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Frustration Level
+                                    </strong>
+
+                                    <br>
+
+                                    <span class="${frustrationClass}">
+
+                                        ${item.frustration_level}
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Trust Score
+                                    </strong>
+
+                                    <br>
+
+                                    ${item.trust_score}
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Trust Level
+                                    </strong>
+
+                                    <br>
+
+                                    ${item.trust_level}
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Category
+                                    </strong>
+
+                                    <br>
+
+                                    ${item.category || "Unknown"}
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Knowledge Confidence
+                                    </strong>
+
+                                    <br>
+
+                                    ${item.knowledge_confidence}
+
+                                </div>
+
+
+                                <div class="detail">
+
+                                    <strong>
+                                        Status
+                                    </strong>
+
+                                    <br>
+
+                                    <span class="${isResolved ? "resolved-status" : "open"}">
+
+                                        ${item.status || "OPEN"}
+
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="reason">
+
+                                <strong>
+                                    Escalation Reason
+                                </strong>
+
+                                <p>
+                                    ${item.escalation_reason}
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                class="resolve-button"
+                                onclick="resolveEscalation(${item.id})"
+                                ${isResolved ? "disabled" : ""}
+                            >
+
+                                ${isResolved ? "✓ Resolved" : "Resolve Case"}
+
+                            </button>
+
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("");
+
+
+    }
+    catch (error) {
+
+
+        document.getElementById(
+            "loading"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "error"
+        ).textContent =
+            "Could not connect to the Flask backend.";
+
+
+        console.error(error);
+
+    }
+
+}
+
+
+// ==========================================
+// RESOLVE ESCALATION
+// ==========================================
+
+async function resolveEscalation(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to resolve this case?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+
+        const response = await fetch(
+
+            `http://127.0.0.1:5000/escalations/${id}/resolve`,
+
+            {
+
+                method: "PUT"
+
+            }
+
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.error ||
+                "Could not resolve the case."
+            );
+
+            return;
+
+        }
+
+
+        alert(
+            "Escalation resolved successfully!"
+        );
+
+
+        // Reload dashboard
+        loadEscalations();
+
+
+    }
+    catch (error) {
+
+
+        console.error(error);
+
+
+        alert(
+            "Could not connect to the Flask backend."
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// START DASHBOARD
+// ==========================================
+
+loadEscalations();
+
+
+</script>
+
+
+</body>
+
+</html>
+
+
+

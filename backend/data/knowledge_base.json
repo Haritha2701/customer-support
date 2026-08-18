@@ -1,0 +1,101 @@
+[
+    {
+        "id": 1,
+        "category": "return",
+        "question": "What is your return policy?",
+        "answer": "Customers can return products within 30 days of receiving the order.",
+        "keywords": [
+            "return",
+            "returns",
+            "return policy"
+        ]
+    },
+    {
+        "id": 2,
+        "category": "refund",
+        "question": "When will I receive my refund?",
+        "answer": "Refunds are normally processed within 5 to 7 business days after the returned product is received.",
+        "keywords": [
+            "refund",
+            "money back",
+            "refund time"
+        ]
+    },
+    {
+        "id": 3,
+        "category": "delivery",
+        "question": "How long does delivery take?",
+        "answer": "Standard delivery normally takes 5 to 7 business days.",
+        "keywords": [
+             "delivery",
+    "shipping",
+    "arrive",
+    "arrival",
+    "delivery time",
+    "late",
+    "delay",
+    "delayed",
+    "order late",
+    "where is my order",
+    "when will my order arrive",
+    "order hasn't arrived"
+        ]
+    },
+    {
+        "id": 4,
+        "category": "cancellation",
+        "question": "Can I cancel my order?",
+        "answer": "Orders can be cancelled before they are shipped.",
+        "keywords": [
+            "cancel",
+            "cancellation",
+            "cancel order"
+        ]
+    },
+    {
+        "id": 5,
+        "category": "payment",
+        "question": "Why did my payment fail?",
+        "answer": "A payment can fail because of insufficient funds, incorrect card details, or a temporary payment provider problem.",
+        "keywords": [
+            "payment",
+            "payment failed",
+            "card",
+            "payment problem"
+        ]
+    },
+    {
+        "id": 6,
+        "category": "exchange",
+        "question": "Can I exchange my product?",
+        "answer": "Products can be exchanged within 30 days if they meet the exchange requirements.",
+        "keywords": [
+            "exchange",
+            "replace",
+            "replacement"
+        ]
+    },
+    {
+        "id": 7,
+        "category": "damaged_product",
+        "question": "What should I do if my product is damaged?",
+        "answer": "Please contact customer support and provide a photo of the damaged product so that we can assist you.",
+        "keywords": [
+            "damaged",
+            "broken",
+            "damage"
+        ]
+    },
+    {
+        "id": 8,
+        "category": "password",
+        "question": "I forgot my password.",
+        "answer": "You can reset your password using the 'Forgot Password' option on the login page.",
+        "keywords": [
+            "password",
+            "forgot password",
+            "reset password",
+            "login"
+        ]
+    }
+]

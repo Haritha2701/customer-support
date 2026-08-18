@@ -1,0 +1,170 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+}
+
+.chat-container {
+    width: 500px;
+    height: 650px;
+
+    background: white;
+
+    border-radius: 15px;
+
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+
+/* Header */
+
+.chat-header {
+    background: #2563eb;
+    color: white;
+
+    padding: 20px;
+
+    text-align: center;
+}
+
+.chat-header h1 {
+    font-size: 24px;
+}
+
+.chat-header p {
+    margin-top: 5px;
+}
+
+
+/* Chat area */
+
+.chat-box {
+    flex: 1;
+
+    padding: 20px;
+
+    overflow-y: auto;
+
+    background: #f8fafc;
+}
+
+
+/* Messages */
+
+.message {
+    max-width: 80%;
+
+    padding: 12px;
+
+    margin-bottom: 15px;
+
+    border-radius: 12px;
+}
+
+.message p {
+    margin-top: 5px;
+}
+
+
+/* Bot */
+
+.bot-message {
+    background: #e2e8f0;
+
+    margin-right: auto;
+}
+
+
+/* User */
+
+.user-message {
+    background: #2563eb;
+
+    color: white;
+
+    margin-left: auto;
+}
+
+
+/* Input */
+
+.input-area {
+    display: flex;
+
+    padding: 15px;
+
+    border-top: 1px solid #ddd;
+
+    background: white;
+}
+
+#message-input {
+    flex: 1;
+
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+}
+
+#send-button {
+    margin-left: 10px;
+
+    padding: 12px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+}
+
+#send-button:hover {
+    opacity: 0.9;
+}
+.analysis-box {
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.analysis-box strong {
+    font-size: 16px;
+}
+
+.analysis-box p {
+    margin: 8px 0;
+}
+
+.analysis-box ul {
+    margin-top: 5px;
+    padding-left: 20px;
+}
